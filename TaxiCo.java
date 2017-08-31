@@ -15,9 +15,7 @@ public class TaxiCo
     // The name of the company's base.
     private final String base;    
     // The fleet of taxis.
-    private ArrayList<Taxi> taxiFleet;
-    // The fleet of shuttles.
-    private ArrayList<Shuttle> shuttleFleet;
+    private ArrayList< Vehicle > vehicleFleet;
     // A value for allocating taxi ids.
     private int nextID;
     // A list of available destinations for shuttles.
@@ -31,8 +29,7 @@ public class TaxiCo
     {
         companyName = name;
         base = "base";
-        taxiFleet = new ArrayList<Taxi>();
-        shuttleFleet = new ArrayList<Shuttle>();
+        vehicleFleet = new ArrayList< Vehicle >();
         nextID = 1;
         destinations = new ArrayList<String>();
         fillDestinations();
@@ -45,7 +42,7 @@ public class TaxiCo
     public void addTaxi()
     {
         Taxi taxi = new Taxi(base, "Car #" + nextID);
-        taxiFleet.add(taxi);
+        vehicleFleet.add(taxi);
         // Increment the ID for the next one.
         nextID++;
     }
@@ -71,7 +68,7 @@ public class TaxiCo
         }
         
         Shuttle shuttle = new Shuttle("Shuttle #" + nextID, route);
-        shuttleFleet.add(shuttle);
+        vehicleFleet.add(shuttle);
         // Increment the ID for the next one.
         nextID++;
     }
@@ -81,19 +78,19 @@ public class TaxiCo
      * @param id The id of the taxi to be returned.
      * @return The matching taxi, or null if no match is found.
      */
-    public Taxi lookup(String id)
+    public Vehicle lookup(String id)
     {
         boolean found = false;
-        Taxi taxi = null;
-        Iterator<Taxi> it = taxiFleet.iterator();
+        Vehicle vehicle = null;
+        Iterator<Vehicle> it = vehicleFleet.iterator();
         while(!found && it.hasNext()) {
-            taxi = it.next();
-            if(id.equals(taxi.getID())) {
+            vehicle = it.next();
+            if(id.equals(vehicle.getID())) {
                 found = true;
             }
         }
         if(found) {
-            return taxi;
+            return vehicle;
         }
         else {
             return null;
@@ -106,11 +103,8 @@ public class TaxiCo
     public void showStatus()
     {
         System.out.println("Current status of the " + companyName + " fleet");
-        for(Taxi taxi : taxiFleet) {
-            System.out.println(taxi.getStatus());
-        }
-        for(Shuttle shuttle : shuttleFleet) {
-            System.out.println(shuttle.getStatus());
+        for(Vehicle current : vehicleFleet) {
+            System.out.println(current.getStatus());
         }
     }
     
@@ -127,4 +121,41 @@ public class TaxiCo
         destinations.add("Sainsbury's");
         destinations.add("Darwin");
     }
+
+    /**
+     * Receive a request for Vehicle and return the next available.
+     * Shuttles have priority.
+     * 
+     * @param destination The destination that need to go.
+     */
+    public Vehicle requestVehicle( String destination )
+    {
+	// Looks up the vehicle list searching a shuttle.
+	for( Vehicle current : vehicleFleet )
+	{
+		if( current instanceof Shuttle )
+		{
+			if( destination.equals( current.getDestination() ) )
+			{
+				return current;
+			}
+		}
+	}
+	
+	// If not find a shuttle, than shearch for a taxi.
+	for( Vehicle current : vehicleFleet )
+	{
+		if( current instanceof Taxi )
+		{
+			if( destination.equals( current.getDestination() ) )
+			{
+				return current;
+			}
+		}
+	}
+	
+	// If find none Vehicle, returns null.
+	return null;
+    }
+
 }

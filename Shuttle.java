@@ -10,11 +10,7 @@ import java.util.*;
  */
 public class Shuttle extends Vehicle
 {
-    // The next destination of this shuttle on its
-    // circular route.
-    private String destination;
-    // The location of this shuttle.
-    private String location;
+ 
     // The circular route of this shuttle.
     private ArrayList<String> route;
     // The destination number in route that the shuttle is
@@ -31,42 +27,14 @@ public class Shuttle extends Vehicle
     {
         super( id );
         setRoute(route);
-    }
-    
-    /**
-     * Return the status of this shuttle.
-     * @return The status.
-     */
-    public String getStatus()
-    {
-        return getID() + " at " + location + " headed for " +
-               destination;
-    }
-    
-    /**
-     * Return the location of the shuttle.
-     * @return The location of the shuttle.
-     */
-    public String getLocation()
-    {
-        return location;
-    }
-    
-    /**
-     * Return the destination of the shuttle.
-     * @return The destination of the shuttle.
-     */
-    public String getDestination()
-    {
-        return destination;
-    }
+    } 
     
     /**
      * Indicate that this shuttle has arrived at its next destination.
      */
     public void arrived()
     {
-        location = destination;
+        setLocation( getDestination() );
         setNextDestination();
     }
     
@@ -83,15 +51,6 @@ public class Shuttle extends Vehicle
         }
         setDestination(route.get(destinationNumber));
     }
-
-    /**
-     * Set the intented destination of the suttle.
-     * @param destination The intended destination.
-     */
-    private void setDestination(String destination)
-    {
-        this.destination = destination;
-    }
     
     /**
      * Set the route for this shuttle.
@@ -103,7 +62,7 @@ public class Shuttle extends Vehicle
         this.route = new ArrayList<String>();
         this.route.addAll(route);
         destinationNumber = 0;
-        location = route.get(destinationNumber);
+        setLocation( route.get(destinationNumber) );
         setNextDestination();
     }
 

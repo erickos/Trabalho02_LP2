@@ -8,10 +8,7 @@
  */
 public class Taxi extends Vehicle
 {
-    // The destination of this taxi.
-    private String destination;
-    // The location of this taxi.
-    private String location;
+    
     // Whether it is free or not.
     private boolean free;
 
@@ -24,8 +21,8 @@ public class Taxi extends Vehicle
     {
         super( id );
 
-        location = base;
-        destination = null;
+        setLocation( base );
+        setDestination( null );
         free = true;
     }
     
@@ -38,53 +35,16 @@ public class Taxi extends Vehicle
     {
         setDestination(destination);
         free = false;
-    }
-
-    /**
-     * Return the status of this taxi.
-     * @return The status.
-     */
-    public String getStatus()
-    {
-        return getID() + " at " + location + " headed for " +
-               destination;
-    }
-    
-    /**
-     * Return the location of the taxi.
-     * @return The location of the taxi.
-     */
-    public String getLocation()
-    {
-        return location;
-    }
-    
-    /**
-     * Return the destination of the taxi.
-     * @return The destination of the taxi.
-     */
-    public String getDestination()
-    {
-        return destination;
-    }
-    
-    /**
-     * Set the intented destination of the taxi.
-     * @param destination The intended destination.
-     */
-    public void setDestination(String destination)
-    {
-        this.destination = destination;
-    }
-    
+    } 
+       
     /**
      * Indicate that this taxi has arrived at its destination.
      * As a result, it will be free.
      */
     public void arrived()
     {
-        location = destination;
-        destination = null;
+        setLocation( getDestination() );
+        setDestination( null );
         free = true;
     }
 }
